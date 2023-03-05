@@ -32,7 +32,7 @@ class PlayerService {
     static async postPlayer(clubId, body) {
 
         const {firstName, lastName, otherName} = body;
-        const club = await Club.findById({_id: clubId})
+        // const club = await Club.findById({_id: clubId})
         const checkPlayerExist =  await Player.findOne({firstName, lastName})
 
         if(checkPlayerExist) {
@@ -43,7 +43,7 @@ class PlayerService {
             firstName,
             lastName,
             otherName,
-            team: club.clubName
+            team: clubId
         })
 
         await playerDetail.save();

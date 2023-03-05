@@ -13,11 +13,10 @@ const playerSchema = new mongoose.Schema({
         type: String,
     },
     team: {
-        type: String,
-        required: true
+        type: mongoose.Schema.Types.ObjectId
     }
 })
 
 const Player = mongoose.model('Player', playerSchema)
 
-module.exports =  Player
+module.exports =  Player;

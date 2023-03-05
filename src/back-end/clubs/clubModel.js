@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
-const Tournament = require('../tournaments/tournamentModel')
+// const Tournament = require('../tournaments/tournamentModel');
+const Player = require('../players/playerModel')
 
 const clubSchema = new mongoose.Schema({
 
@@ -14,14 +15,16 @@ const clubSchema = new mongoose.Schema({
     gf: Number,
     ga: Number,
     gd: String,
-    points: Number
+    points: Number,
+
+
 })
 
-clubSchema.virtual('tournament', {
-    ref: 'Tournament',
+clubSchema.virtual('player', {
+    ref: 'Player',
     localField: '_id',
-    foreignField: 'participant'
-})
+    foreignField: 'team'
+});
 
 
 const Club = mongoose.model('Club', clubSchema)

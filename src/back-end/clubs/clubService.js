@@ -1,5 +1,4 @@
 const Club = require('./clubModel');
-const ClubPlayers = require('../players/playerModel');
 
 class ClubService {
 
@@ -14,24 +13,17 @@ class ClubService {
     }
 
     static async getClub(clubId) {
-        const team = await Club.findById({_id: clubId});
-        const players = await ClubPlayers.find({team: clubId})
 
-            if(!team) {
+        const club = await Club.findOne({_id: clubId})
+        .populate({path: 'player', select: 'firstName lastName otherName'})
+
+            if(!club) {
                 throw new Error('club not found!');
             }
 
-            if(!players) {
-                throw new Error('No player from this club');
-            }
-
-            const playersName = [];
-
-            players.forEach((player) => playersName.push(player.playerName))
-
             const result = {
-                club_name: team.clubName,
-                players: playersName
+                club: club.clubName,
+                players: club.player
             }
             
             return result;
