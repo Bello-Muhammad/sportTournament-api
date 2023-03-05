@@ -46,7 +46,7 @@ class ClubController {
 
     static async removeClub(req, res) {
         try {
-            const data = await ClubService.removeClub(request.params.id);
+            const data = await ClubService.removeClub(req.params.id);
             ResponseHandler.success(res, data);
         } catch (err) {
             ResponseHandler.error(res, err.message);

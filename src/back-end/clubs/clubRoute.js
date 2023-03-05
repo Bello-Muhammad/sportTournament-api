@@ -8,7 +8,7 @@ class ClubRouter {
         app.route(API_ROUTE).get(ClubController.getClubs).post(ClubController.postClub);
         app.route(`${API_ROUTE}/club/:id`).get(ClubController.getClub);
         app.route(`${API_ROUTE}/club/update-club-aggregate/:id`).patch(ClubController.patchClub);
-        app.route(`${API_ROUTE}/club/delete-club/:id`).delete(ClubController.removeClub)
+        app.route(`${API_ROUTE}/club/removeclub/:id`).delete(ClubController.removeClub)
     }
 
 }
