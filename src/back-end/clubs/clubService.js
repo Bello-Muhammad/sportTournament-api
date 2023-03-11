@@ -1,5 +1,5 @@
 const Club = require('./clubModel');
-const Players = require('../players/playerModel')
+// const Players = require('../players/playerModel')
 
 class ClubService {
 
@@ -22,12 +22,12 @@ class ClubService {
                 throw new Error('club not found!');
             }
 
-            const result = {
+            const data = {
                 club: club.clubName,
                 players: club.player
             }
             
-            return result;
+            return data;
     }
 
     static async postClub(club) {

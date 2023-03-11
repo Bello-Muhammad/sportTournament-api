@@ -31,8 +31,21 @@ class PlayerService {
 
     static async postPlayer(clubId, body) {
 
-        const {firstName, lastName, otherName} = body;
-        // const club = await Club.findById({_id: clubId})
+        const {_firstName, _lastName, _otherName} = body;
+        const name = [_firstName, _lastName, _otherName];
+
+        // console.log(name)
+
+        for(let i = 0; i < name.length; i++) {
+            if(!name[1][0]){}continue;
+            name[i] = name[i][0].toUpperCase() + name[i].substr(1)
+        }
+
+        const firstName = name[0], lastName = name[1], otherName = name[2];
+
+        console.log(firstName, lastName, otherName)
+        
+        const club = await Club.findById({_id: clubId})
         const checkPlayerExist =  await Player.findOne({firstName, lastName})
 
         if(checkPlayerExist) {

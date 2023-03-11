@@ -16,7 +16,10 @@ const clubSchema = new mongoose.Schema({
     ga: Number,
     gd: String,
     points: Number,
-
+    tournament: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Tournament'
+    }
 
 })
 

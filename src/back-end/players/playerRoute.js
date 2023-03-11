@@ -8,7 +8,7 @@ class PlayerRouter {
         app.route(`${API_ROUTE}clubs/club/:id/players`).get(PlayerController.getPlayers);
         app.route(`${API_ROUTE}clubs/club/:id/player`).post(PlayerController.postPlayer);
         app.route(`${API_ROUTE}player`).get(PlayerController.getPlayer);
-        app.route(`${API_ROUTE}clubs/club/playes/player/:id`).patch(PlayerController.patchPlayer).delete(PlayerController.removePlayer)
+        app.route(`${API_ROUTE}clubs/club/players/player/:id`).patch(PlayerController.patchPlayer).delete(PlayerController.removePlayer)
     }
 
 }
