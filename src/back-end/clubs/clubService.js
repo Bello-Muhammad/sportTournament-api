@@ -1,5 +1,6 @@
 const Club = require('./clubModel');
-// const Players = require('../players/playerModel')
+const Players = require('../players/playerModel');
+const firstLetterCap = require('../utils/helpers');
 
 class ClubService {
 
@@ -16,30 +17,22 @@ class ClubService {
     static async getClub(clubId) {
 
         const club = await Club.findOne({_id: clubId})
-        .populate({path: 'player', select: 'firstName lastName otherName'})
+        .populate({path: 'players', select: 'firstName lastName otherName'})
 
             if(!club) {
                 throw new Error('club not found!');
             }
 
-            const data = {
-                club: club.clubName,
+            return {
+                club,
                 players: club.player
             }
-            
-            return data;
+              
     }
 
-    static async postClub(club) {
-       
-        const clubname = club;
-        const club_Name = clubname.split(" ");
+    static async postClub(tournamentId, club) {
 
-        for (let i = 0; i < club_Name.length; i++) {
-            club_Name[i] = club_Name[i][0].toUpperCase() + club_Name[i].substr(1);
-        }
-
-        const clubName = club_Name.join(' ');
+        const clubName = firstLetterCap(club);
 
         const checkForClub = await Club.findOne({ clubName });
 
@@ -47,36 +40,28 @@ class ClubService {
             throw new Error('club exist: '+checkForClub.clubName);
         }
 
-        const addClub = new Club({ clubName });
+        const addClub = new Club({ 
+            clubName,
+            tournament: tournamentId
+         });
 
-        await addClub.save((err) => {
-            if(err) {
-                throw new Error('can\'t save club');
-            }
-        })
-
-        return addClub;
+        return await addClub.save();
     }
 
     static async patchClub(clubId, body) {
 
-        const updates = Object.keys(body);
-        const club = await Club.findById({ _id: clubId });
+        const club = await Club.findOneAndUpdate({_id: clubId}, body, {new: true});
 
         if(!club) {
-            throw new Error("Team not available");
+            throw new Error("Team to update not found");
         }
 
-        updates.forEach((update) => club[update] = body[update]);
-        await club.save();
-
         return club;
-            
     }
 
     static async removeClub(clubId) {
 
-        const club = await Club.findById({_id: clubId});
+        const club = await Club.findByIdAndDelete({_id: clubId});
 
         if(!club) {
             throw new Error('club does not exist!')

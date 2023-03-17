@@ -1,25 +1,24 @@
-const Player = require('./playerModel');
-const Club = require('../clubs/clubModel');
+const Players = require('./playerModel');
+const firstLetterCap = require('../utils/helpers');
+// const Club = require('../clubs/clubModel');
 
 class PlayerService {
 
     static async getPlayers(clubId) {
 
-        const club = await Club.findById({_id: clubId});
-        const players = await Player.find({team: club.clubName});
+        const players = await Players.find({team: clubId});
             
-        if(players.length === 0 ) {
+        if(!players.length === 0 ) {
             throw new Error("No player found!");
         }
 
         return players;
-
     }
 
     static async getPlayer(body) {
 
         const {firstName} = body;
-        const searchPlayer = await Player.find({firstName});
+        const searchPlayer = await Players.find({firstName: {$regex: firstName, $options: 'i'}});
 
         if(!searchPlayer) {
             throw new Error("player name not found");                
@@ -32,50 +31,42 @@ class PlayerService {
     static async postPlayer(clubId, body) {
 
         const {_firstName, _lastName, _otherName} = body;
-        const name = [_firstName, _lastName, _otherName];
-
-        // console.log(name)
-
-        for(let i = 0; i < name.length; i++) {
-            if(!name[1][0]){}continue;
-            name[i] = name[i][0].toUpperCase() + name[i].substr(1)
-        }
-
-        const firstName = name[0], lastName = name[1], otherName = name[2];
-
-        console.log(firstName, lastName, otherName)
+        let _name = [_firstName,_lastName,_otherName];
+        let name = firstLetterCap(_name.join(" ")).split(" ");
         
-        const club = await Club.findById({_id: clubId})
-        const checkPlayerExist =  await Player.findOne({firstName, lastName})
+        const checkPlayerExist =  await Players.findOne({firstName: name[0], lastName: name[1]});
 
         if(checkPlayerExist) {
             throw new Error("player added already"+ checkPlayerExist);
         }
 
-        const playerDetail = new Player({
-            firstName,
-            lastName,
-            otherName,
-            team: clubId
-        })
+        if(name.length === 2) {
+            
+            const playerDetail = new Players({
+                firstName: name[0],
+                lastName: name[1],
+                team: clubId
+            });
+            return await playerDetail.save();
+        }else{
 
-        await playerDetail.save();
-
-        return playerDetail;            
-
+            const playerDetail = new Players({
+                firstName: name[0],
+                lastName: name[1],
+                otherName: name[2],
+                team: clubId
+            });
+            return await playerDetail.save();
+        }
     }
 
     static async patchPlayer(playerId, body)  {
 
-        const updates = Object.keys(body)
-        const player = await Player.findById({_id: playerId})
+        const player = await Player.findByIdAndUpdate({_id: playerId}, body, {new: true})
 
         if(!player) {
             throw new Error('Player not found!')
         }
-
-        updates.forEach((update) => player[update] = body[update]);
-        await player.save();
 
         return player
     }

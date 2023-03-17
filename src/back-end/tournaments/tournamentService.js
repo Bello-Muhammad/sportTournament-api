@@ -1,10 +1,11 @@
 const Tournament = require('./tournamentModel');
 const Fixture = require('./fixturesModel');
+const firstLetterCap = require('../utils/helpers');
 
 class TournamentService {
 
     static async getTournaments() {
-
+        
         const tournaments = await Tournament.find();
 
         if(tournaments.length === 0) {
@@ -26,6 +27,7 @@ class TournamentService {
 
         const data = {
             title: tournament.title,
+            session: tournament.session,
             clubs: tournament.club
         }
         return data;
@@ -49,30 +51,24 @@ class TournamentService {
     }
 
     static async postTournament(body) {
-        const {Title, session} = req.body;
+        const {Title, session, startDate, endDate} = body;
 
-        const eventTitle = Title.split(" ");
-
-        for (let i = 0; i < eventTitle.length; i++) {
-            eventTitle[i] = eventTitle[i][0].toUpperCase() + eventTitle[i].substr(1);
-        }
-
-        const title = eventTitle.join(' ');
+        const title = firstLetterCap(Title);
 
         const checkForTournament = await Tournament.findOne({session});
 
         if(checkForTournament) {
-            throw new Error('Tournament aleady added!')
+            throw new Error('Tournament already added!')
         }
 
         const tournament = new Tournament({
             title,
-            session
+            session,
+            startDate,
+            endDate
         });
 
-        await tournament.save();
-        
-        return tournament
+        return await tournament.save();
     }
 
     static async postFixture(tournamentId, body) {

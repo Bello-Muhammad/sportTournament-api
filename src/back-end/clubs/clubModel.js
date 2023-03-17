@@ -1,6 +1,5 @@
 const mongoose = require('mongoose')
-// const Tournament = require('../tournaments/tournamentModel');
-const Player = require('../players/playerModel')
+const Players = require('../players/playerModel')
 
 const clubSchema = new mongoose.Schema({
 
@@ -9,13 +8,31 @@ const clubSchema = new mongoose.Schema({
         trim: true,
         required: true,
     },
-    played: Number,
-    win: Number,
-    lose: Number,
-    gf: Number,
-    ga: Number,
+    played: {
+        type: Number,
+        default: 0
+    },
+    win: {
+        type: Number,
+        default: 0
+    },
+    lose: {
+        type: Number,
+        default: 0
+    },
+    gf: {
+        type: Number,
+        default: 0
+    },
+    ga:{
+        type: Number,
+        default: 0
+    },
     gd: String,
-    points: Number,
+    points:{
+        type: Number,
+        default: 0
+    },
     tournament: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Tournament'
@@ -23,8 +40,8 @@ const clubSchema = new mongoose.Schema({
 
 })
 
-clubSchema.virtual('player', {
-    ref: 'Player',
+clubSchema.virtual('players', {
+    ref: 'Players',
     localField: '_id',
     foreignField: 'team'
 });

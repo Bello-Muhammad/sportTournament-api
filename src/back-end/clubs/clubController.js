@@ -27,7 +27,7 @@ class ClubController {
 
         const club = req.body.club
         try {
-            const data = await ClubService.postClub(club);
+            const data = await ClubService.postClub(req.params.id, club);
             ResponseHandler.success(res, data);
         } catch (err) {
             ResponseHandler.error(res, err.message);
