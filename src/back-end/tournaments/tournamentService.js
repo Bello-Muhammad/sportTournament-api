@@ -13,7 +13,6 @@ class TournamentService {
         }
 
         return tournaments;
-  
     }
 
     static async getTournament(tournamentId) {
@@ -25,12 +24,12 @@ class TournamentService {
             throw new Error('Tournament not found');
         }
 
-        const data = {
+        return {
             title: tournament.title,
             session: tournament.session,
             clubs: tournament.club
         }
-        return data;
+        
     }
 
     static async getFixture(tournamentId) {

@@ -9,8 +9,8 @@ const tournamentSchema = mongoose.Schema({
         trim: true
     },
     session: String,
-    startDate: Date,
-    endDate: Date,
+    startDate: String,
+    endDate: String,
     progress: {
         type: String,
         default: 'not active'

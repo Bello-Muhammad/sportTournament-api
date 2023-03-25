@@ -1,5 +1,5 @@
 const Club = require('./clubModel');
-const Players = require('../players/playerModel');
+const clubPlayers = require('../players/playerModel');
 const firstLetterCap = require('../utils/helpers');
 
 class ClubService {
@@ -25,8 +25,8 @@ class ClubService {
 
             return {
                 club,
-                players: club.player
-            }
+                players: club.players
+            };
               
     }
 
@@ -61,15 +61,14 @@ class ClubService {
 
     static async removeClub(clubId) {
 
-        const club = await Club.findByIdAndDelete({_id: clubId});
+        const club = await Club.deleteOne({_id: clubId});
+        const players= club.deletedCount && (await clubPlayers.deleteMany({team: clubId}))
 
         if(!club) {
             throw new Error('club does not exist!')
         }
 
-        await Players.deleteMany({team: clubId})
-
-        return club, {reply: 'club removed successfully'};
+        return club.deletedCount && players.deletedCount;
     }
 
 }

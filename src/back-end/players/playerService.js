@@ -1,5 +1,5 @@
 const Players = require('./playerModel');
-const {firstLetterUpperCase, playerDetails} = require('../utils/helpers');
+const firstLetterUpperCase = require('../utils/helpers');
 // const Club = require('../clubs/clubModel');
 
 class PlayerService {
@@ -31,22 +31,27 @@ class PlayerService {
     static async postPlayer(clubId, body) {
 
         const {_firstName, _lastName, _otherName} = body;
-        let _name = [_firstName,_lastName,_otherName];
-        let name = firstLetterUpperCase(_name.join(" ")).split(" ");
-        
-        const checkPlayerExist =  await Players.findOne({firstName: name[0], lastName: name[1]});
+
+        const firstName = firstLetterUpperCase(_firstName);
+        const lastName = firstLetterUpperCase(_lastName);
+        const OtherName = firstLetterUpperCase(_otherName);
+        const otherName = OtherName || "";
+        const team = clubId
+
+        // console.log(firstName, lastName, otherName)
+        const checkPlayerExist =  await Players.findOne({firstName, lastName});
 
         if(checkPlayerExist) {
             throw new Error("player added already"+ checkPlayerExist);
         }
 
-        const player = playerDetails(name);
-        const playersDetail = new Players({
-            ...player,
-            team: clubId
-        })
+        // // const player = playerDetails(name);
+        // // const playersDetail = new Players({
+        // //     ...player,
+        // //     team: clubId
+        // // })
+        return await Players.create({firstName, lastName, otherName, team})
 
-        return await playersDetail.save();
     }
 
     static async patchPlayer(playerId, body)  {
