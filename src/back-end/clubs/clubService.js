@@ -23,10 +23,7 @@ class ClubService {
                 throw new Error('club not found!');
             }
 
-            return {
-                club,
-                players: club.players
-            };
+            return club;
               
     }
 

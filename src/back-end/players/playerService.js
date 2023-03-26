@@ -30,45 +30,39 @@ class PlayerService {
 
     static async postPlayer(clubId, body) {
 
-        const {_firstName, _lastName, _otherName} = body;
+        const {_firstName, _lastName, _otherName, username} = body;
 
-        const firstName = firstLetterUpperCase(_firstName);
-        const lastName = firstLetterUpperCase(_lastName);
-        const OtherName = firstLetterUpperCase(_otherName);
-        const otherName = OtherName || "";
-        const team = clubId
-
-        // console.log(firstName, lastName, otherName)
-        const checkPlayerExist =  await Players.findOne({firstName, lastName});
+        const checkPlayerExist =  await Players.findOne({username: {$regex: username, $options: 'i'}},);
 
         if(checkPlayerExist) {
             throw new Error("player added already"+ checkPlayerExist);
         }
 
-        // // const player = playerDetails(name);
-        // // const playersDetail = new Players({
-        // //     ...player,
-        // //     team: clubId
-        // // })
+        const firstName = firstLetterUpperCase(_firstName);
+        const lastName = firstLetterUpperCase(_lastName);
+        const OtherName = firstLetterUpperCase(_otherName);
+        const otherName = OtherName || "";
+        const team = clubId;
+
         return await Players.create({firstName, lastName, otherName, team})
 
     }
 
     static async patchPlayer(playerId, body)  {
 
-        const player = await Player.findByIdAndUpdate({_id: playerId}, body, {new: true})
+        const player = await Players.findByIdAndUpdate({_id: playerId}, body, {new: true})
 
         if(!player) {
             throw new Error('Player not found!')
         }
 
-        return player
+        return player;
     }
 
     static async removePlayer(playerId) {
         
-        const removedPlayer = await Player.findByIdAndDelete({_id: playerId});
-        return `${removedPlayer.firstName} ${removedPlayer.otherName} ${removedPlayer.lastName} Removed`;
+        const removedPlayer = await Players.findByIdAndDelete({_id: playerId});
+        return removedPlayer;
 
     }
 

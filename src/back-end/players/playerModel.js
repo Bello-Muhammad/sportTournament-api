@@ -12,6 +12,10 @@ const playerSchema = new mongoose.Schema({
     otherName: {
         type: String,
     },
+    username: {
+        type: String,
+        unique: true
+    },
     team: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Club'

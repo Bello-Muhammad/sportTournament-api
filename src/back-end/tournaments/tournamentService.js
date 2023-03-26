@@ -24,11 +24,7 @@ class TournamentService {
             throw new Error('Tournament not found');
         }
 
-        return {
-            title: tournament.title,
-            session: tournament.session,
-            clubs: tournament.club
-        }
+        return tournament;
         
     }
 
