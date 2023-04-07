@@ -17,7 +17,7 @@ class ClubService {
     static async getClub(clubId) {
 
         const club = await Club.findOne({_id: clubId})
-        .populate({path: 'players', select: 'firstName lastName otherName'})
+        .populate({path: 'players', select: 'firstName lastName otherName'}).exec()
 
             if(!club) {
                 throw new Error('club not found!');

@@ -40,8 +40,7 @@ class PlayerService {
 
         const firstName = firstLetterUpperCase(_firstName);
         const lastName = firstLetterUpperCase(_lastName);
-        const OtherName = firstLetterUpperCase(_otherName);
-        const otherName = OtherName || "";
+        const otherName = _OtherName ? firstLetterUpperCase(_otherName) : "";
         const team = clubId;
 
         return await Players.create({firstName, lastName, otherName, team})

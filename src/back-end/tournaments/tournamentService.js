@@ -68,24 +68,33 @@ class TournamentService {
 
     static async postFixture(tournamentId, body) {
 
-        const {firstTeam, secondTeam, date, time} = body;
 
-        checkForFixture = await Fixture.findOne({firstTeam, secondTeam});
+        const {title, versus} = body;
 
-        if(checkForFixture) {
-            throw new Error('These fixture is fixed already.');
-        }
+        return await Fixture.create({title, versus, tourFix: tournamentId});
 
-        const fixture = new Fixture({
-            firstTeam,
-            secondTeam,
-            date,
-            time,
-            tourFix: tournamentId
-        })
+        // if(checkForFixture) {
+        //     throw new Error('These fixture is fixed already.');
+        // }
 
-        await fixture.save();
-        return fixture;
+        // const fixture = new Fixture({
+        //     firstTeam,
+        //     secondTeam,
+        //     date,
+        //     time,
+        //     tourFix: tournamentId
+        // })
+
+        // await fixture.save();
+        // return fixture;
+    }
+
+    static async getTable(tournamentId) {
+
+        const tournament = await Tournament.findOne({_id: tournamentId})
+        .populate({path: 'club', select: 'played win lose gf ga gd points _id'})
+
+        return tournament.club.sort((a,b) => (a.gf < b.gf) ? 1 : -1);
     }
 }
 

@@ -41,12 +41,22 @@ class TournamentController {
 
     static async postFixture(req, res) {
         try {
-            const data = await TournamentService.postFixture(req.params.id, req.body)
+            const data = await TournamentService.postFixture(req.params.id, req.body);
+            ResponseHandler.success(res, data)
         } catch (err) {
             ResponseHandler.error(res, err.message)
         }
     }
 
+    static async getTable(req, res) {
+        try {
+            const data = await TournamentService.getTable(req.params.id);
+            ResponseHandler.success(res, data);
+        } catch (err) {
+            ResponseHandler.error(res, err.message);
+        }
+    }
+
 }
 
-module.exports = TournamentController
+module.exports = TournamentController;
