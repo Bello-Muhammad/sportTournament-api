@@ -30,9 +30,9 @@ class PlayerService {
 
     static async postPlayer(clubId, body) {
 
-        const {_firstName, _lastName, _otherName, username} = body;
+        const {_firstName, _lastName, _otherName, _username} = body;
 
-        const checkPlayerExist =  await Players.findOne({username: {$regex: username, $options: 'i'}},);
+        const checkPlayerExist =  await Players.findOne({_username: {$regex: _username, $options: 'i'}},);
 
         if(checkPlayerExist) {
             throw new Error("player added already"+ checkPlayerExist);
@@ -40,10 +40,11 @@ class PlayerService {
 
         const firstName = firstLetterUpperCase(_firstName);
         const lastName = firstLetterUpperCase(_lastName);
-        const otherName = _OtherName ? firstLetterUpperCase(_otherName) : "";
+        const otherName = _otherName ? firstLetterUpperCase(_otherName) : "";
+        const username = firstLetterUpperCase(_username);
         const team = clubId;
 
-        return await Players.create({firstName, lastName, otherName, team})
+        return await Players.create({firstName, lastName, otherName, username, team})
 
     }
 

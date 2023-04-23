@@ -4,7 +4,6 @@ const ResponseHandler = require('../dto/ResponseHandler')
 class PlayerController {
 
     static async getPlayers(req, res) {
-        // console.log(req.params)
         try {
             const data = await PlayerService.getPlayers(req.params.id);
             ResponseHandler.success(res, data);

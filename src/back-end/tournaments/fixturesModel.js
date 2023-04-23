@@ -1,15 +1,22 @@
 const mongoose = require('mongoose');
 
 const fixtureSchema = new mongoose.Schema({
-    title: String,
-    versus: [
-        {
-            firstTeam: String,
-            secondTeam: String,
-            date: String,
-            time: String,
-        }
-    ],
+    firstTeam: {
+        type: String,
+        require: true
+    },
+    secondTeam: {
+        type: String,
+        require: true
+    },
+    date: {
+        type: Date,
+        required: true
+    },
+    time: {
+        type: String,
+        require: true
+    },
     tourFix: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Tournament'

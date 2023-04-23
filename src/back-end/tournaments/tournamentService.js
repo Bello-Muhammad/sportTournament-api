@@ -1,6 +1,7 @@
 const Tournament = require('./tournamentModel');
 const Fixture = require('./fixturesModel');
 const firstLetterCap = require('../utils/helpers');
+// const moment = require('moment')
 
 class TournamentService {
 
@@ -69,24 +70,24 @@ class TournamentService {
     static async postFixture(tournamentId, body) {
 
 
-        const {title, versus} = body;
+        const {firstTeam, secondTeam, date, time } = body;
 
-        return await Fixture.create({title, versus, tourFix: tournamentId});
+        const checkForFixture = await Fixture.findOne({firstTeam, secondTeam})
 
-        // if(checkForFixture) {
-        //     throw new Error('These fixture is fixed already.');
-        // }
+        if(checkForFixture) {
+            throw new Error('These fixture is fixed already.');
+        }
 
-        // const fixture = new Fixture({
-        //     firstTeam,
-        //     secondTeam,
-        //     date,
-        //     time,
-        //     tourFix: tournamentId
-        // })
+        const fixture = new Fixture({
+            firstTeam,
+            secondTeam,
+            date,
+            time,
+            tourFix: tournamentId
+        })
 
-        // await fixture.save();
-        // return fixture;
+        return await fixture.save();
+
     }
 
     static async getTable(tournamentId) {

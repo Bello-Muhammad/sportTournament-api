@@ -14,9 +14,10 @@ const playerSchema = new mongoose.Schema({
     },
     username: {
         type: String,
-        unique: true
+        unique: true,
+        required: true
     },
-    team: {
+    team: {  
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Club'
     }

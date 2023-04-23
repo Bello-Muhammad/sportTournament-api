@@ -58,14 +58,9 @@ class ClubService {
 
     static async removeClub(clubId) {
 
-        const club = await Club.deleteOne({_id: clubId});
-        const players= club.deletedCount && (await clubPlayers.deleteMany({team: clubId}))
+        const club = await Club.findById({_id: clubId});
 
-        if(!club) {
-            throw new Error('club does not exist!')
-        }
-
-        return club.deletedCount && players.deletedCount;
+        return await club.remove()
     }
 
 }
