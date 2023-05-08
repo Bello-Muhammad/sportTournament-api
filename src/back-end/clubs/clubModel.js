@@ -43,6 +43,10 @@ const clubSchema = new mongoose.Schema({
         default: 0,
         required: true
     },
+    status: {
+        type: String,
+        require: true
+    },
     tournament: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Tournament'
@@ -53,12 +57,6 @@ clubSchema.virtual('players', {
     ref: 'Player',
     localField: '_id',
     foreignField: 'team'
-})
-
-clubSchema.pre('remove', async function (next) {
-    const club = this
-    await Player.deleteMany({team: club._id})
-    next()
 })
 
 

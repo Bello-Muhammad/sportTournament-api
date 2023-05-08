@@ -1,52 +1,10 @@
 const Tournament = require('./tournamentModel');
 const Fixture = require('./fixturesModel');
 const firstLetterCap = require('../utils/helpers');
-// const moment = require('moment')
 
 class TournamentService {
 
-    static async getTournaments() {
-        
-        const tournaments = await Tournament.find();
-
-        if(tournaments.length === 0) {
-            throw new Error('No tournament yet!');
-        }
-
-        return tournaments;
-    }
-
-    static async getTournament(tournamentId) {
-
-        const tournament = await Tournament.findOne({_id: tournamentId})
-        .populate({path: 'club', select: 'clubName'});
-
-        if(!tournament) {
-            throw new Error('Tournament not found');
-        }
-
-        return tournament;
-        
-    }
-
-    static async getFixture(tournamentId) {
-
-        const tourFix = await Tournament.findOne({_id: tournamentId})
-        .populate({path: 'fixture', select: 'firstTeam secondTeam date time -_id'});
-
-        if(!tourFix) {
-            throw new Error('Tournament do not exist')
-        }
-
-        const data = {
-            title: tourFix.title,
-            fixtures: tourFix.fixture
-        }
-
-        return data;
-    }
-
-    static async postTournament(body) {
+    static async addTournament(body) {
         const {Title, session, startDate, endDate} = body;
 
         const title = firstLetterCap(Title);
@@ -67,7 +25,64 @@ class TournamentService {
         return await tournament.save();
     }
 
-    static async postFixture(tournamentId, body) {
+    static async getAllTournaments() {
+        
+        const tournaments = await Tournament.find();
+
+        if(tournaments.length === 0) {
+            throw new Error('No tournament yet!');
+        }
+
+        return tournaments;
+    }
+
+    static async getActiveTournaments() {
+        
+        const tournaments = await Tournament.find({status: 'active'});
+
+        if(!tournaments) {
+            throw new Error('No active tournament yet!');
+        }
+
+        return tournaments;
+    }
+
+    static async getTournament(tournamentId) {
+
+        const tournament = await Tournament.findOne({_id: tournamentId})
+        .populate({path: 'club', select: 'clubName'});
+
+        if(!tournament) {
+            throw new Error('Tournament not found');
+        }
+
+        return tournament;
+        
+    }
+
+    static async tournamentSatusUpdate(tournamentId, body) {
+        const update = await Tournament.findOneAndUpdate({_id: tournamentId}, body, {new: true});
+        return update;
+    }
+
+    static async getFixture(tournamentId) {
+
+        const tourFix = await Tournament.findOne({_id: tournamentId})
+        .populate({path: 'fixture', select: 'firstTeam secondTeam date time -_id'});
+
+        if(!tourFix) {
+            throw new Error('Tournament do not exist')
+        }
+
+        const data = {
+            title: tourFix.title,
+            fixtures: tourFix.fixture
+        }
+
+        return data;
+    }
+
+    static async addFixture(tournamentId, body) {
 
 
         const {firstTeam, secondTeam, date, time } = body;

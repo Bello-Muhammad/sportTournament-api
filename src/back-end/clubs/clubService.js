@@ -14,6 +14,16 @@ class ClubService {
         return clubs;
     }
 
+    static async getActiveClubs() {
+        const activeClubs = await Club.find({status: 'active'});
+
+        if(!activeClubs) {
+            throw new Error('No active clubs yet');
+        }
+
+        return activeClubs;
+    }
+
     static async getClub(clubId) {
 
         const club = await Club.findOne({_id: clubId})
@@ -27,7 +37,7 @@ class ClubService {
               
     }
 
-    static async postClub(tournamentId, club) {
+    static async addClub(tournamentId, club) {
 
         const clubName = firstLetterCap(club);
 
@@ -56,11 +66,11 @@ class ClubService {
         return club;
     }
 
-    static async removeClub(clubId) {
+    static async updateClubStatus(clubId, body) {
 
-        const club = await Club.findById({_id: clubId});
+        const club = await Club.findByIdAndUpdate({_id: clubId}, body,{new: true});
 
-        return await club.remove()
+        return club;
     }
 
 }

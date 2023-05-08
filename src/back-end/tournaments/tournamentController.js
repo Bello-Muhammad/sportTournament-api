@@ -3,7 +3,7 @@ const ResponseHandler = require('../dto/ResponseHandler');
 
 class TournamentController {
 
-    static async getTournaments(req, res) {
+    static async getActiveTournaments(req, res) {
         try {
             const data = await TournamentService.getTournaments()
             ResponseHandler.success(res, data)
@@ -27,24 +27,6 @@ class TournamentController {
             ResponseHandler.success(res, data);
         } catch (err) {
             ResponseHandler.error(res, err.message);
-        }
-    }
-
-    static async postTournament(req, res) {
-        try {
-            const data = await TournamentService.postTournament(req.body);
-            ResponseHandler.success(res, data);
-        } catch (err) {
-            ResponseHandler.error(res, err.message);
-        }
-    }
-
-    static async postFixture(req, res) {
-        try {
-            const data = await TournamentService.postFixture(req.params.id, req.body);
-            ResponseHandler.success(res, data)
-        } catch (err) {
-            ResponseHandler.error(res, err.message)
         }
     }
 
