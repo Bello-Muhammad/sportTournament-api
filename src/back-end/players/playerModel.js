@@ -12,11 +12,6 @@ const playerSchema = new mongoose.Schema({
     otherName: {
         type: String,
     },
-    username: {
-        type: String,
-        unique: true,
-        required: true
-    },
     status: {
         type: String,
         require: true

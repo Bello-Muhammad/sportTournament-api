@@ -5,10 +5,10 @@ class ClubController {
 
     static async getActiveClubs(req, res) {
         try {
-            const data = await ClubService.getActiveClubs();
+            const data = await ClubService.getActiveClubs(req.params.tourId);
             ResponseHandler.success(res, data);
         } catch (err) {
-            ResponseHandler.error(res, err.message)
+            ResponseHandler.error(res, err.message);
         }
     }
 

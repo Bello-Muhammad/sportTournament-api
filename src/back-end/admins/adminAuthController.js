@@ -1,11 +1,11 @@
-const AdminService = require('./adminService');
+const AdminAuthService = require('./adminAuthService');
 const ResponseHandler = require('../dto/ResponseHandler');
 
 class AdminController {
 
     static async adminSignUp(req, res) {
         try {
-            const data = await AdminService.adminSignUp(req.body)
+            const data = await AdminAuthService.adminSignUp(req.body)
             ResponseHandler.success(res, data)
         } catch (err) {
             ResponseHandler.error(res, err.message);            
@@ -14,8 +14,8 @@ class AdminController {
 
     static async adminLogin(req, res) {
         try {
-            const data = await AdminService.adminLogin(req.body)
-            // req.session.admin = data;
+            const data = await AdminAuthService.adminLogin(req.body)
+            req.session.admin = data;
             ResponseHandler.success(res, data)
         } catch (err) {
             ResponseHandler.error(res, err.message);            

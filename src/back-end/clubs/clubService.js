@@ -1,11 +1,12 @@
 const Club = require('./clubModel');
 const clubPlayers = require('../players/playerModel');
 const firstLetterCap = require('../utils/helpers');
+const Tournament = require('../tournaments/tournamentModel');
 
 class ClubService {
 
-    static async getClubs() {
-        const clubs = await Club.find()
+    static async getClubs(tourId) {
+        const clubs = await Club.find({tournament: tourId})
 
         if(clubs.length === 0) {
             throw new Error('No club added yet');
@@ -14,10 +15,14 @@ class ClubService {
         return clubs;
     }
 
-    static async getActiveClubs() {
-        const activeClubs = await Club.find({status: 'active'});
+    static async getActiveClubs(tourId) {
+        const tourStatus = await Tournament.findById({_id: tourId})
+        const activeClubs = await Club.find({tournament: tourId, status: 'active'});
 
-        if(!activeClubs) {
+        if(tourStatus.status === "offline" || tourStatus.status === "Offline") {
+            throw new Error('Tournament is no more active!')
+        }
+        else if(!activeClubs) {
             throw new Error('No active clubs yet');
         }
 

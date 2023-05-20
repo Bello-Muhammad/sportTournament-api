@@ -14,7 +14,7 @@ class adminClubController {
 
     static async getClubs(req, res) {
         try {
-            const data = await ClubService.getClubs();
+            const data = await ClubService.getClubs(req.params.tourId);
             ResponseHandler.success(res, data);
         } catch (err) {
             ResponseHandler.error(res, err.message)

@@ -30,21 +30,30 @@ class adminTournamentsController {
         }
     }
 
-    // static async getTournament(req, res) {
-    //     try {
-    //         const data = await TournamentService.getTournament(req.params.id)
-    //         ResponseHandler.success(res, data)
-    //     } catch (err) {
-    //         ResponseHandler.error(res, err.message)
-    //     }
-    // }
-
-    static async updateTournamentStatus(req, res) {
+    static async fixture(req, res) {
         try {
-            const data = await TournamentService.tournamentStatusUpdate(req.params.id, req.body);
+            const data = await TournamentService.adminFixture(req.params.id);
             ResponseHandler.success(res, data);
         } catch (err) {
             ResponseHandler.error(res, err.message);
+        }
+    }
+
+    static async tourStatusUpdate(req, res) {
+        try {
+            const data = await TournamentService.satusUpdate(req.params.id, req.body);
+            ResponseHandler.success(res, data);
+        } catch (err) {
+            ResponseHandler.error(res, err.message)
+        }
+    }
+
+    static async getTournament(req, res) {
+        try {
+            const data = await TournamentService.getTournament(req.params.id)
+            ResponseHandler.success(res, data)
+        } catch (err) {
+            ResponseHandler.error(res, err.message)
         }
     }
 

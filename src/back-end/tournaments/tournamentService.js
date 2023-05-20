@@ -9,7 +9,7 @@ class TournamentService {
 
         const title = firstLetterCap(Title);
 
-        const checkForTournament = await Tournament.findOne({session});
+        const checkForTournament = await Tournament.findOne({Title});
 
         if(checkForTournament) {
             throw new Error('Tournament already added!')
@@ -36,9 +36,9 @@ class TournamentService {
         return tournaments;
     }
 
-    static async getActiveTournaments() {
+    static async activeTournaments() {
         
-        const tournaments = await Tournament.find({status: 'active'});
+        const tournaments = await Tournament.find({status: {$regex:'active', $options: 'i'}});
 
         if(!tournaments) {
             throw new Error('No active tournament yet!');
@@ -56,16 +56,21 @@ class TournamentService {
             throw new Error('Tournament not found');
         }
 
-        return tournament;
+        return tournament.club;
         
     }
 
-    static async tournamentSatusUpdate(tournamentId, body) {
+    static async satusUpdate(tournamentId, body) {
+
         const update = await Tournament.findOneAndUpdate({_id: tournamentId}, body, {new: true});
+
+        if(!update) {
+            throw new Error('tournament doesn'/'t exist')
+        }
         return update;
     }
 
-    static async getFixture(tournamentId) {
+    static async adminFixture(tournamentId) {
 
         const tourFix = await Tournament.findOne({_id: tournamentId})
         .populate({path: 'fixture', select: 'firstTeam secondTeam date time -_id'});
@@ -74,12 +79,23 @@ class TournamentService {
             throw new Error('Tournament do not exist')
         }
 
-        const data = {
-            title: tourFix.title,
-            fixtures: tourFix.fixture
+        return tourFix.fixture;
+    }
+
+    static async getFixture(tournamentId) {
+
+        const tourFix = await Tournament.findOne({_id: tournamentId})
+        .populate({path: 'fixture', select: 'firstTeam secondTeam date time -_id'});
+
+        let Status = tourFix.status
+
+        if(!tourFix) {
+            throw new Error('Tournament do not exist')
+        }else if(Status === "offline" || Status === "Offline" ) {
+            throw new Error('Tournament is not active')
         }
 
-        return data;
+        return tourFix.fixture;
     }
 
     static async addFixture(tournamentId, body) {

@@ -4,7 +4,6 @@ class AdminService {
 
     static async adminSignUp(body) {
 
-        // console.log(body)
         const admin = new Admin({
             ...body
         })
@@ -14,8 +13,6 @@ class AdminService {
 
     static async adminLogin(body) {
         const {username, password} = body;
-        username.toLowerCase();
-        console.log(username)
         
         const admin = await Admin.findByCridentials(username, password)
 

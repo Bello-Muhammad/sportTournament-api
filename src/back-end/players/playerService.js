@@ -1,12 +1,29 @@
 const Players = require('./playerModel');
 const firstLetterUpperCase = require('../utils/helpers');
-// const Club = require('../clubs/clubModel');
+const Club = require('../clubs/clubModel');
 
 class PlayerService {
 
     static async getPlayers(clubId) {
 
         const players = await Players.find({team: clubId});
+            
+        if(!players.length === 0 ) {
+            throw new Error("No player found!");
+        }
+
+        return players;
+    }
+
+    static async getActivePlayers(clubId) {
+
+        const checkClubStatus = await Club.findById({_id: clubId});
+
+        if(checkClubStatus.status === "offline" || checkClubStatus.status === "Offline") {
+            throw new Error('this club is not active');
+        }
+
+        const players = await Players.find({team: clubId, status: 'active'});
             
         if(!players.length === 0 ) {
             throw new Error("No player found!");
@@ -28,11 +45,11 @@ class PlayerService {
 
     }
 
-    static async postPlayer(clubId, body) {
+    static async addPlayer(clubId, body) {
 
         const {_firstName, _lastName, _otherName, _username} = body;
 
-        const checkPlayerExist =  await Players.findOne({_username: {$regex: _username, $options: 'i'}},);
+        const checkPlayerExist =  await Players.findOne({_username: {$regex: _username, $options: 'i'}});
 
         if(checkPlayerExist) {
             throw new Error("player added already"+ checkPlayerExist);
@@ -57,13 +74,6 @@ class PlayerService {
         }
 
         return player;
-    }
-
-    static async removePlayer(playerId) {
-        
-        const removedPlayer = await Players.findByIdAndDelete({_id: playerId});
-        return removedPlayer;
-
     }
 
 }

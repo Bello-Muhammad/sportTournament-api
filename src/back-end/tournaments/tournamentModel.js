@@ -11,9 +11,9 @@ const tournamentSchema = mongoose.Schema({
     session: String,
     startDate: String,
     endDate: String,
-    progress: {
+    status: {
         type: String,
-        default: 'not active'
+        default: 'offline'
     }
 
 })
