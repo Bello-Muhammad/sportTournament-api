@@ -16,6 +16,8 @@ class AdminService {
         
         const admin = await Admin.findByCridentials(username, password)
 
+        req.session.admin = admin;
+
         return admin
     }
 

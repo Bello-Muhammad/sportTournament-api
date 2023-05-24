@@ -45,7 +45,7 @@ const clubSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        require: true
+        default: 'offline'
     },
     tournament: {
         type: mongoose.Schema.Types.ObjectId,

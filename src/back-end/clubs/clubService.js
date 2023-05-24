@@ -19,7 +19,9 @@ class ClubService {
         const tourStatus = await Tournament.findById({_id: tourId})
         const activeClubs = await Club.find({tournament: tourId, status: 'active'});
 
-        if(tourStatus.status === "offline" || tourStatus.status === "Offline") {
+        let status = tourStatus.status;
+
+        if( status === "offline") {
             throw new Error('Tournament is no more active!')
         }
         else if(!activeClubs) {
