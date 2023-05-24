@@ -89,10 +89,10 @@ class TournamentService {
 
         let Status = tourFix.status
 
-        if(!tourFix) {
-            throw new Error('Tournament do not exist')
-        }else if(Status === "offline" || Status === "Offline" ) {
+        if(Status === "offline") {
             throw new Error('Tournament is not active')
+        }else if(!tourFix) {
+            throw new Error('Tournament do not exist')
         }
 
         return tourFix.fixture;
